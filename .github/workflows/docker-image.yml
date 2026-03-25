@@ -3,17 +3,13 @@ name: push
 on:
   push:
     branches:
-      - main
-
-env:
-  CI: true
-  APP_IMAGE_NAME: neuroexciter/devops-for-developers-project-74
+      - master
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    
     steps:
-
       - uses: actions/checkout@v3
 
       - name: Set up Docker Buildx
@@ -30,10 +26,11 @@ jobs:
         with:
           context: .
           file: Dockerfile.production
-          cache-from: type=registry,ref=${{ env.APP_IMAGE_NAME }}
+          cache-from: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/devops-for-developers-project-74
           cache-to: type=inline
           push: true
-          tags: ${{ env.APP_IMAGE_NAME }}:latest
+          tags: ${{ secrets.DOCKER_USERNAME }}/devops-for-developers-project-74:latest
 
       - name: Check
-        run: docker-compose -f docker-compose.yml up --abort-on-container-exit
+        run: |
+          docker compose -f docker-compose.yml up --abort-on-container-exit
