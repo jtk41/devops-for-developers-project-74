@@ -1,10 +1,7 @@
 services:
   app:
-    image: node:20.12.2
-    user: "${UID:-1000}:${GID:-1000}"
-    working_dir: /app
-    volumes:
-      - ./app:/app
-    ports:
-      - "8080:8080"
-    command: make dev
+    build:
+      context: .
+      dockerfile: Dockerfile.production
+    image: neuroexciter/devops-for-developers-project-74
+    command: make test
